@@ -72,6 +72,7 @@ class Barclay(object):
 
         if type_return == 'dict':
             return return_dict
+        return str(return_dict)
 
     def next3Fixtures(self, type_return='string'):
         now = datetime.datetime.now()
@@ -91,6 +92,7 @@ class Barclay(object):
 
         if type_return == 'dict':
             return return_dict
+        return str(return_dict)
 
     def pointsTable(self, type_return='string'):
         url = 'http://www.premierleague.com/en-gb/matchday/league-table.html'
@@ -132,6 +134,7 @@ class Barclay(object):
 
         if type_return == 'dict':
             return return_dict
+        return str(return_dict)
 
     def topScorers(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb.html"
@@ -155,8 +158,9 @@ class Barclay(object):
 
         if type_return == 'dict':
             return return_dict
+        return str(return_dict)
 
-    def Fixtures(self, return_type='string'):
+    def Fixtures(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb/matchday/matches.html?paramClubId=ALL&paramComp_8=true&view=.dateSeason"
 
         res = requests.get(url, stream=True, proxies=proxyDict)
@@ -179,8 +183,12 @@ class Barclay(object):
             fixtures_l = tables.select('.location a')
             for i in range(len(fixtures_l)):
                 fixtures_location.append(str(fixtures_l[i].text))
-
-        return list(zip(fixtures_clubs, fixtures_time, fixtures_location))
+        
+        
+        temp = list(zip(fixtures_clubs, fixtures_time, fixtures_location))
+        if type_return == 'dict':
+            return temp
+        return str(temp)
 
     def Results(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb.html"
@@ -213,9 +221,12 @@ class Barclay(object):
         results_location = results_location[0:20]
         results_location.reverse()
 
-        return zip(results_time, results_clubs, results_location)
+        val_return = list(zip(results_time, results_clubs, results_location))
+        if type_return == 'dict':
+            return val_return
+        return str(val_return)
 
-    def liveScore(self):
+    def liveScore(self, type_return='string'):
         self.url = 'http://www.premierleague.com/en-gb.html'
         self.res = requests.get(self.url, stream=True, proxies=proxyDict)
         self.soup = bs4.BeautifulSoup(self.res.text,'lxml')
@@ -226,10 +237,12 @@ class Barclay(object):
             temp = i.text.split()
             temp = ' '.join(temp)
             live_matches.append(temp)
+        
+        if type_return == 'dict':
+            return live_matches
+        return str(live_matches)
 
-        return live_matches
-
-    def playerStats(self, name):
+    def playerStats(self, name, type_return='string'):
         try:
             self.url = 'http://www.premierleague.com/en-gb/players/profile.html/' + name
             self.res = requests.get(self.url, stream=True, proxies=proxyDict)
@@ -245,7 +258,9 @@ class Barclay(object):
             statsDict[temp[8]] = temp[9]
             statsDict[temp[12]] = temp[13]
             statsDict[temp[16]] = temp[17]
-            return statsDict
+            if type_return == 'dict':
+                return statsDict
+            return str(statsDict)
         
         except:
             raise ValueError('Name not found, enter a valid name of player!')
