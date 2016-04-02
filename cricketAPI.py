@@ -56,41 +56,101 @@ def get_player_stats(playerName):
      
         player_stats[b.string]=temp
 
-  """  if 'Current age' in player_stats.keys():
-        player_age=player_stats['Current age']
-        print player_age
-    if 'Major teams' in player_stats.keys():
-        player_teams=player_stats['Major teams']
-        print player_teams
-
-    if 'Playing role' in player_stats.keys():
-        player_role=player_stats['Playing role']
-        print player_role
-    if 'Batting style' in player_stats.keys():
-        player_bat_style=player_stats['Batting style']
-        print player_bat_style)
-
-    if 'Bowling style' in player_stats.keys():
-        player_bowl_style=player_stats['Bowling style']
-        print(player_bowl_style)
-    """
 
     return player_stats  
 
 def live_score():
 
-    url = "http://www.cricbuzz.com/cricket-match/live-scores"
-    response = requests.get('http://www.cricbuzz.com/live-cricket-full-commentary/15803/wi-vs-ind-2nd-semi-final-icc-world-t20-2016')
-    soup = BeautifulSoup(response.text,"lxml")
+    #url = "http://www.cricbuzz.com/cricket-match/live-scores"
+    #response = requests.get('http://www.cricbuzz.com/live-cricket-full-commentary/15803/wi-vs-ind-2nd-semi-final-icc-world-t20-2016')
+    #soup = bs4.BeautifulSoup(response.text,"lxml")
     response = requests.get('http://www.cricbuzz.com/live-scores')
-    soup = BeautifulSoup(response.text,"lxml")
+    soup = bs4.BeautifulSoup(response.text,"lxml")
     team_mate = soup.findAll("div", {"class" : "cb-lv-main"})
+    scores = []
     for i in team_mate:
-        print (i.text)
-        print "\n\n"        
+    	scores.append(i.text) 
+
+    return scores
+
+def list_matches():
+	response = requests.get('https://cricket.yahoo.com/matches/schedule')
+
+	soup = bs4.BeautifulSoup(response.text,"lxml")
+
+	head_list = soup.findAll("em", {"class": "ycric-table-heading"})
+
+	invited_team_list = soup.findAll("div", {"class": "ycric-table-sub-heading"})
+
+	no_list = soup.findAll("td", {"class": "sno"})
+
+	tour_dates_list  = soup.findAll("span", {"class" : "matchDateTime"})
+
+	match_list = soup.findAll("td", {"class": "smatch"})
+
+	venue_list= soup.findAll("td", {"class": "svenue"})
+
+	result_list = soup.findAll("td", {"class": "sresult"})
+
+	
+
+	heading = 0
+
+	nos = []
+	tour_date = []
+	team_list = []
+	venue = []
+	result = []
+	ans = []
+	cnt = 0
+	for i in match_list:
+		if i.text != "Match":
+			team_list.append(i.text)
+
+	for i in no_list:
+		if i.text !="#":
+			nos.append(i.text)
+
+	for i in venue_list:
+		if i.text!="Venue":
+			venue.append(i.text)
+	for i in result_list:
+		if i.text!="Result":
+			result.append(i.text)
+	cnt =len(nos)
+
+	check = 0
+
+	matches = []
+	for i in range(cnt):
+		if nos[i]=="1":
+			if check != 0:
+				check = check +1
+			else:
+				matches.append("\n\n")
+				
+				#print ("")
+				#print ("")
+			matches.append(head_list[heading].text)
+			#print (head_list[heading].text)
+			z= "Teams: "+invited_team_list[heading].text
+			matches.append(z)
+			#print (z)
+			heading = heading+1
+			l = nos[i]+" "+tour_dates_list[i].text+" "+team_list[i]+" "+venue[i]+" "+result[i]
+			matches.append(l)
+			#print (l)
+		else:
+			l = nos[i]+" "+tour_dates_list[i].text+" "+team_list[i]+" "+venue[i]+" "+result[i]
+			matches.append(l)
+			#print (l)
+
+	return matches
+
    
 if __name__=='__main__':     
     player_stats=get_player_stats("Virender Sehwag")
-    live_score()
-    
+    print (player_stats)
+    print (live_score())
+    print (list_matches())
     
