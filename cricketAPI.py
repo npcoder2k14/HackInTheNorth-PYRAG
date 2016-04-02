@@ -7,7 +7,40 @@ from flask import request
 app=Flask(__name__)
 
 
+<<<<<<< HEAD
+    def get_player_stats(self, playerName):
+        base_url="http://www.espncricinfo.com"
+        url="http://www.espncricinfo.com/ci/content/player/search.html?search="
+        names=[]
+        names=playerName.split('-')
+        playerName="+".join(names)
+        url=url+playerName
+        res=requests.get(url)
+        res.raise_for_status()
+        soup=bs4.BeautifulSoup(res.text,"lxml")
+        playerStatLink=soup.select(".ColumnistSmry") 
+        playerStatLink=playerStatLink[1]
+        temp_url=playerStatLink.get('href')
+        url=base_url+temp_url
+        res=requests.get(url)
+        soup=bs4.BeautifulSoup(res.text,"lxml")
+        player_info=soup.select(".ciPlayerinformationtxt")
+        player_stats={}   
+        for item in player_info[0:len(player_info)]:
+            b=item.find('b')
+            if b.string=="Major teams":
+                span=item.findAll('span')
+                temp=""
+                for it in span:
+                    temp+=it.string+" "
+            else:
+                temp=item.find('span')
+                temp=temp.string
+            player_stats[b.string]=temp
+        return player_stats  
+=======
 class Cricket:
+>>>>>>> 0b74a2aa8cf06af36b1dbf4840fc41fde37b2655
 
 	def get_player_stats(self):
             playerName=request.args.get("player_name")
@@ -128,6 +161,13 @@ class Cricket:
 
 if __name__=='__main__':
     attr =  Cricket()
+<<<<<<< HEAD
+    player_stats=attr.get_player_stats("Virender-Sehwag")
+    print (player_stats)
+    print (attr.live_score())
+    print (attr.list_matches())
+    print (attr.news())
+=======
     app.add_url_rule('/',view_func=attr.news)
     app.add_url_rule('/cric/matches/',view_func=attr.list_matches)
     app.add_url_rule('/cric/live/',view_func=attr.live_score)
@@ -144,3 +184,4 @@ if __name__=='__main__':
 	print (attr.list_matches())
 	print (attr.news())
    """
+>>>>>>> 0b74a2aa8cf06af36b1dbf4840fc41fde37b2655
