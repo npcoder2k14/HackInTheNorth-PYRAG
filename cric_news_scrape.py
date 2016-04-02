@@ -1,5 +1,5 @@
 import requests,os,bs4
-"""
+
 address = "172.31.1.6"
 port = "8080"
 user = "HITN051"
@@ -13,7 +13,7 @@ proxyDict = {
               "https" : https_proxy,
               "ftp"   : ftp_proxy
             }
-"""
+
 class cric_news:
  def news(self):
     base_url='http://www.cricbuzz.com/cricket-news/latest-news'
