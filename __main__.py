@@ -18,11 +18,11 @@ def main():
 
     -C, --cricket             Get cricket updates for international matches.
 
-    [live_score, news,
+    [live-score, news,
     ,fixtures
-    player_stats[name]]       Fields to get. `live_scores` to get live socre of
+    player-stats[name]]       Fields to get. `live-scores` to get live socre of
                               on-going matches, `news` to get latest news headlines,
-                              `player_stats` to get statistics of player specified.
+                              `player-stats` to get statistics of player specified.
                               `fixtures` to get updates on upcoming messages.
                               Compulsory single argument. For football option you
                               can give additional options topscorer, points-table.
@@ -50,13 +50,13 @@ def main():
                 fixture = Barclay().Fixtures()
                 header = ['Clubs', 'Time(UTC)', 'Location']
                 print(tabulate(fixture, headers=header, tablefmt='fancy_grid', floatfmt=".2f"))
-            elif args[3].lower() == 'live_score':
+            elif args[3].lower() == 'live-score':
                 print('\n'.join(Barclay().liveScore()))
             elif args[3].lower() == 'news':
                 news = Barclay().get_news_headlines(type_return='dict')
                 for headline in news:
                     print('Headline: '+headline+'\n'+'link: '+news[headline]+'\n')
-            elif args[3].lower() == 'player_stats':
+            elif args[3].lower() == 'player-stats':
                 stats = Barclay().playerStats(args[4])
                 print()
                 for stat in stats:
@@ -77,15 +77,30 @@ def main():
         from cricketAPI import Cricket
         if '-f' in args or '--football' in args:
             raise ValueError('Both Cricket and Football cannot be specifed together!')
-        if args[2].lower() == 'live_score':
-            pass
-        if args[2].lower() == 'fixtures':
+        if args[2].lower() == 'live-score':
+            print(Cricket().live_score())
+        elif args[2].lower() == 'fixtures':
             tournaments = Cricket().list_matches()
             header = ['Teams', 'Time and Date', 'Venue', 'Result']
             for tournament in tournaments:
                 print("Tournament: {}".format(tournament))
                 print(tabulate(tournaments[tournament], headers=header, tablefmt='fancy_grid'))
                 print('\n')
+        elif args[2].lower() == 'news':
+            news = Cricket().news()
+            print()
+            for headline in news:
+                print('Headline: '+headline+'\n'+'link: '+news[headline]+'\n')
+        elif args[2].lower() == 'player-stats':
+            try:
+                stats = Cricket().get_player_stats(args[3])
+                print('\n')
+                for stat in stats:
+                    print(stat+': '+stats[stat])
+            except:
+                raise ValueError('Not a Valid Name!')
+        else:
+            raise ValueError('Not a Valid Argument! Use -h or --help for help ')
 
 
 if __name__ == '__main__':

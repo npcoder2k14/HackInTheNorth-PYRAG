@@ -9,7 +9,7 @@ class Cricket(object):
         base_url="http://www.espncricinfo.com"
         url="http://www.espncricinfo.com/ci/content/player/search.html?search="
         names=[]
-        names=playerName.split()
+        names=playerName.split('-')
         playerName="+".join(names)
         url=url+playerName
         res=requests.get(url)
@@ -104,7 +104,7 @@ class Cricket(object):
 
 if __name__=='__main__':
     attr =  Cricket()
-    player_stats=attr.get_player_stats("Virender Sehwag")
+    player_stats=attr.get_player_stats("Virender-Sehwag")
     print (player_stats)
     print (attr.live_score())
     print (attr.list_matches())
