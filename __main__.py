@@ -25,7 +25,7 @@ def main():
                               `player-stats` to get statistics of player specified.
                               `fixtures` to get updates on upcoming messages.
                               Compulsory single argument. For football option you
-                              can give additional options topscorer, points-table.
+                              can give additional options topscorer.
                               Use `-` instead of space in names.
 
     -proxy                    To specify proxy. Defaults to system proxy. Take name of
@@ -47,17 +47,18 @@ def main():
         elif args[2].lower() == 'barclay':
             from barclay import Barclay
             if args[3].lower() == 'fixtures':
-                fixture = Barclay().Fixtures()
+                fixture = Barclay().Fixtures(type_return='dict')
                 header = ['Clubs', 'Time(UTC)', 'Location']
                 print(tabulate(fixture, headers=header, tablefmt='fancy_grid', floatfmt=".2f"))
             elif args[3].lower() == 'live-score':
-                print('\n'.join(Barclay().liveScore()))
+                print('\n'.join(Barclay().liveScore(type_return='dict')))
             elif args[3].lower() == 'news':
                 news = Barclay().get_news_headlines(type_return='dict')
+                print()
                 for headline in news:
                     print('Headline: '+headline+'\n'+'link: '+news[headline]+'\n')
             elif args[3].lower() == 'player-stats':
-                stats = Barclay().playerStats(args[4])
+                stats = Barclay().playerStats(args[4], type_return='dict')
                 print()
                 for stat in stats:
                     print(stat+': '+stats[stat])
@@ -78,22 +79,22 @@ def main():
         if '-f' in args or '--football' in args:
             raise ValueError('Both Cricket and Football cannot be specifed together!')
         if args[2].lower() == 'live-score':
-            print(Cricket().live_score())
+            print(Cricket().live_score(type_return='dict'))
         elif args[2].lower() == 'fixtures':
-            tournaments = Cricket().list_matches()
+            tournaments = Cricket().list_matches(type_return='dict')
             header = ['Teams', 'Time and Date', 'Venue', 'Result']
             for tournament in tournaments:
                 print("Tournament: {}".format(tournament))
                 print(tabulate(tournaments[tournament], headers=header, tablefmt='fancy_grid'))
                 print('\n')
         elif args[2].lower() == 'news':
-            news = Cricket().news()
+            news = Cricket().news(type_return='dict')
             print()
             for headline in news:
                 print('Headline: '+headline+'\n'+'link: '+news[headline]+'\n')
         elif args[2].lower() == 'player-stats':
             try:
-                stats = Cricket().get_player_stats(args[3])
+                stats = Cricket().get_player_stats(args[3], type_return='dict')
                 print('\n')
                 for stat in stats:
                     print(stat+': '+stats[stat])
