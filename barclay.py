@@ -161,20 +161,26 @@ class Barclay(object):
 
         res = requests.get(url, stream=True, proxies=proxyDict)
         soup = bs4.BeautifulSoup(res.text,'lxml')
+        fixtures_time = []
+        fixtures_location = []
+        fixtures_clubs = []
+        fixture_table = soup.select('.contentTable')
+        for tables in fixture_table:
+            date = tables.select('th')
+            date[0] = str(date[0].text)
+            fixtures_t = tables.select('.time')
+            for i in range(len(fixtures_t)):
+                fixtures_time.append(str(fixtures_t[i].text)+', ' +date[0])
 
-        fixtures_time = soup.select('.time')
-        for i in range(len(fixtures_time)):
-            fixtures_time[i] = str(fixtures_time[i].text)
+            fixtures_c = tables.select('.clubs a')
+            for i in range(len(fixtures_c)):
+                fixtures_clubs.append(str(fixtures_c[i].text))
 
-        fixtures_clubs = soup.select('.clubs a')
-        for i in range(len(fixtures_clubs)):
-            fixtures_clubs[i] = str(fixtures_clubs[i].text)
+            fixtures_l = tables.select('.location a')
+            for i in range(len(fixtures_l)):
+                fixtures_location.append(str(fixtures_l[i].text))
 
-        fixtures_location = soup.select('.location a')
-        for i in range(len(fixtures_location)):
-            fixtures_location[i] = str(fixtures_location[i].text)
-
-        return [fixtures_clubs, fixtures_time, fixtures_location]
+        return list(zip(fixtures_clubs, fixtures_time, fixtures_location))
 
     def Results(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb.html"
@@ -207,7 +213,42 @@ class Barclay(object):
         results_location = results_location[0:20]
         results_location.reverse()
 
-        return [results_time, results_clubs, results_location]
+        return zip(results_time, results_clubs, results_location)
+
+    def liveScore(self):
+        self.url = 'http://www.premierleague.com/en-gb.html'
+        self.res = requests.get(self.url, stream=True, proxies=proxyDict)
+        self.soup = bs4.BeautifulSoup(self.res.text,'lxml')
+
+        matches = self.soup.select('.LIVE  .MEGAMENU-MATCHnAME')
+        live_matches = []
+        for i in matches:
+            temp = i.text.split()
+            temp = ' '.join(temp)
+            live_matches.append(temp)
+
+        return live_matches
+
+    def playerStats(self, name):
+        try:
+            self.url = 'http://www.premierleague.com/en-gb/players/profile.html/' + name
+            self.res = requests.get(self.url, stream=True, proxies=proxyDict)
+            self.soup = bs4.BeautifulSoup(self.res.text,'lxml')
+
+            stats = self.soup.select('.left td')
+            temp = []
+            statsDict = {}
+            for i in stats:
+                temp.append(i.text)
+
+            statsDict[temp[0]] = temp[1]
+            statsDict[temp[8]] = temp[9]
+            statsDict[temp[12]] = temp[13]
+            statsDict[temp[16]] = temp[17]
+            return statsDict
+        
+        except:
+            raise ValueError('Name not found, enter a valid name of player!')
 
 if __name__ == '__main__':
     obj = Barclay()
@@ -216,3 +257,4 @@ if __name__ == '__main__':
     print(obj.topScorers('dict'))
     print(obj.Fixtures())
     print(obj.Results())
+    print(obj.playerStats('harry-kane'))

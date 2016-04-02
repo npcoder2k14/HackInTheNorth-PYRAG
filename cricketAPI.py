@@ -7,12 +7,12 @@ from flask import request
 app=Flask(__name__)
 
 
-class Cricket(object):
+class Cricket:
 
 	def get_player_stats(self):
-            player=request.args.get("player_name")
+            playerName=request.args.get("player_name")
 	    base_url="http://www.espncricinfo.com"
-	    url="http://www.espncricinfo.com/ci/content/player/search.html?search=player"
+	    url="http://www.espncricinfo.com/ci/content/player/search.html?search="
 	    names=[]
 	    names=playerName.split()
 	    playerName="+".join(names)
@@ -39,7 +39,7 @@ class Cricket(object):
 	    		temp=item.find('span')
 	    		temp=temp.string
 	    	player_stats[b.string]=temp
-	    return player_stats
+	    return str(player_stats)
 
 	def live_score(self):
 
@@ -49,7 +49,7 @@ class Cricket(object):
 	    scores = []
 	    for i in team_mate:
     		scores.append(i.text)
-	    return scores
+	    return str(scores)
 
 	def list_matches(self):
 		response = requests.get('https://cricket.yahoo.com/matches/schedule')
@@ -107,13 +107,13 @@ class Cricket(object):
 				matches.append(l)
 				#print (l)
 
-		return matches
+		return str(matches)
 
 	def news(self):
          
          base_url='http://www.cricbuzz.com/cricket-news/latest-news'
          res=requests.get(base_url)
-         soup = bs4.BeautifulSoup(res.text,"lxml")
+         soup = bs4.BeautifulSoup(res.text,"html.parser")
          news = soup.select(".cb-col-33 a")
          news_dict={}
          for all_news in news:
@@ -122,18 +122,18 @@ class Cricket(object):
          
          global player_name
          player_name=request.args.get('player_name')	    	
-         #return news_dict
+         return str(news_dict)
 		
        
 
 if __name__=='__main__':
     attr =  Cricket()
-    app.add_url_rule('/cric/news/',view_func=attr.news)
+    app.add_url_rule('/',view_func=attr.news)
     app.add_url_rule('/cric/matches/',view_func=attr.list_matches)
     app.add_url_rule('/cric/live/',view_func=attr.live_score)
     app.add_url_rule('/cric/player_stats/',view_func=attr.get_player_stats)
     #myvar = request.GET["myvar"]
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5001))
     app.run(host='0.0.0.0', port=port,debug=True)
     """
 	#app.add_url_rule('/cric/player_stats/',view_func=attr.player_stats)
