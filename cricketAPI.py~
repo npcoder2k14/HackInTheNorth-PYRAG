@@ -6,13 +6,14 @@ from flask import request
 
 app=Flask(__name__)
 
-
+player_name=""
 class Cricket(object):
 
-	def get_player_stats(self):
-            player=request.args.get("player_name")
+	def get_player_stats(self, playerName):
+        global player_name
+        player_name=request.args.get("player_name")
 	    base_url="http://www.espncricinfo.com"
-	    url="http://www.espncricinfo.com/ci/content/player/search.html?search=player"
+	    url="http://www.espncricinfo.com/ci/content/player/search.html?search=player_name"
 	    names=[]
 	    names=playerName.split()
 	    playerName="+".join(names)
@@ -130,8 +131,6 @@ if __name__=='__main__':
     attr =  Cricket()
     app.add_url_rule('/cric/news/',view_func=attr.news)
     app.add_url_rule('/cric/matches/',view_func=attr.list_matches)
-    app.add_url_rule('/cric/live/',view_func=attr.live_score)
-    app.add_url_rule('/cric/player_stats/',view_func=attr.get_player_stats)
     #myvar = request.GET["myvar"]
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port,debug=True)
