@@ -25,7 +25,7 @@ def get_player_stats(playerName):
     res=requests.get(url)
     res.raise_for_status()
     
-    soup=bs4.BeautifulSoup(res.text)
+    soup=bs4.BeautifulSoup(res.text,"lxml")
     
     playerStatLink=soup.select(".ColumnistSmry") 
     playerStatLink=playerStatLink[1]
@@ -67,9 +67,11 @@ def live_score():
     response = requests.get('http://www.cricbuzz.com/live-scores')
     soup = bs4.BeautifulSoup(response.text,"lxml")
     team_mate = soup.findAll("div", {"class" : "cb-lv-main"})
+    scores = []
     for i in team_mate:
-        print (i.text)
-        print ("\n\n")        
+    	scores.append(i.text) 
+
+    return scores
 
 def list_matches():
 	response = requests.get('https://cricket.yahoo.com/matches/schedule')
@@ -119,26 +121,36 @@ def list_matches():
 
 	check = 0
 
+	matches = []
 	for i in range(cnt):
 		if nos[i]=="1":
 			if check != 0:
 				check = check +1
 			else:
-				print ("")
-				print ("")
-			print (head_list[heading].text)
+				matches.append("\n\n")
+				
+				#print ("")
+				#print ("")
+			matches.append(head_list[heading].text)
+			#print (head_list[heading].text)
 			z= "Teams: "+invited_team_list[heading].text
-			print (z)
+			matches.append(z)
+			#print (z)
 			heading = heading+1
 			l = nos[i]+" "+tour_dates_list[i].text+" "+team_list[i]+" "+venue[i]+" "+result[i]
-			print (l)
+			matches.append(l)
+			#print (l)
 		else:
 			l = nos[i]+" "+tour_dates_list[i].text+" "+team_list[i]+" "+venue[i]+" "+result[i]
-			print (l)
+			matches.append(l)
+			#print (l)
+
+	return matches
 
    
 if __name__=='__main__':     
     player_stats=get_player_stats("Virender Sehwag")
-    live_score()
-    list_matches()
+    print (player_stats)
+    print (live_score())
+    print (list_matches())
     
