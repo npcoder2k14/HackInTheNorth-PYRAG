@@ -1,5 +1,6 @@
 import sys
 import textwrap
+from extern import tabulate
 def main():
     """\
     Usage: sport-api [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
@@ -18,34 +19,74 @@ def main():
     -C, --cricket             Get cricket updates for international matches.
 
     [live_score, news,
+    ,fixtures
     player_stats[name]]       Fields to get. `live_scores` to get live socre of
                               on-going matches, `news` to get latest news headlines,
                               `player_stats` to get statistics of player specified.
-                              Compulsory argument
+                              `fixtures` to get updates on upcoming messages.
+                              Compulsory single argument. For football option you
+                              can give additional options topscorer, points-table.
+                              Use `-` instead of space in names.
 
     -proxy                    To specify proxy. Defaults to system proxy. Take name of
-                              a file.
+                              a file. Sample -proxy http://username:password@host:port/
     """
     useage = textwrap.dedent(main.__doc__)
     args = sys.argv
     if args[1] == '-h':
         print(useage)
         sys.exit(0)
-    args = args[1:]
-    if args[1] == '-F' or args[1] == '--football':
-        if args[2][1].lower() == 'c':
+    if '-proxy' in args:
+        with open('proxy.config') as f:
+            f.write(args[args.index('-proxy')+1])
+    if args[1] == '-F' or args[1] == '--football' or args[1] == '-f':
+        if '-c' in args or '-C' in args or '--cricket' in args:
             raise ValueError('Both Football and cricket cannot be specified')
         if args[2] == 'uefa':
-
-        elif args[2] == 'barclay':
+            pass
+        elif args[2].lower() == 'barclay':
             from barclay import Barclay
-            if args[3] == ''
+            if args[3].lower() == 'fixtures':
+                fixture = Barclay().Fixtures()
+                header = ['Clubs', 'Time(UTC)', 'Location']
+                print(tabulate(fixture, headers=header, tablefmt='fancy_grid', floatfmt=".2f"))
+            elif args[3].lower() == 'live_score':
+                print('\n'.join(Barclay().liveScore()))
+            elif args[3].lower() == 'news':
+                news = Barclay().get_news_headlines(type_return='dict')
+                for headline in news:
+                    print('Headline: '+headline+'\n'+'link: '+news[headline]+'\n')
+            elif args[3].lower() == 'player_stats':
+                stats = Barclay().playerStats(args[4])
+                print()
+                for stat in stats:
+                    print(stat+': '+stats[stat])
+            elif args[3].lower() == 'topscorer':
+                scorers = Barclay().topScorers(type_return='dict')
+                top_scorers = []
+                for names in scorers:
+                    top_scorers.append((names, scorers[names]))
+                print(tabulate(top_scorers, headers=['Player Name', 'Goal Scored'], tablefmt='fancy_grid'))
+            else:
+                raise ValueError('Not a Valid argument!\n Use -h option for help.')
         elif args[2] == 'fifa':
-
+            pass
         else:
-            raise TypeError('None of the uefa, barclay, fifa was specified')
+            raise ValueError('Not a Valid argument!\n Use -h option for help')
+    if args[1] == '-C' or args[1] == '-c' or args[1] == '--cricket':
+        from cricketAPI import Cricket
+        if '-f' in args or '--football' in args:
+            raise ValueError('Both Cricket and Football cannot be specifed together!')
+        if args[2].lower() == 'live_score':
+            pass
+        if args[2].lower() == 'fixtures':
+            tournaments = Cricket().list_matches()
+            header = ['Teams', 'Time and Date', 'Venue', 'Result']
+            for tournament in tournaments:
+                print("Tournament: {}".format(tournament))
+                print(tabulate(tournaments[tournament], headers=header, tablefmt='fancy_grid'))
+                print('\n')
 
 
-    if args[1]
 if __name__ == '__main__':
     main()
