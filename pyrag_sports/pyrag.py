@@ -1,6 +1,7 @@
 import sys
 import textwrap
-from extern import tabulate
+from pyrag_sports.extern.tabulate import tabulate
+
 def main():
     """\
     Usage: sport-api [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
@@ -45,7 +46,7 @@ def main():
         if args[2] == 'uefa':
             pass
         elif args[2].lower() == 'barclay':
-            from barclay import Barclay
+            from pyrag_sports.barclay import Barclay
             if args[3].lower() == 'fixtures':
                 fixture = Barclay().Fixtures(type_return='dict')
                 header = ['Clubs', 'Time(UTC)', 'Location']
@@ -67,6 +68,8 @@ def main():
                 top_scorers = []
                 for names in scorers:
                     top_scorers.append((names, scorers[names]))
+                top_scorers = sorted(top_scorers, key=lambda x:int(x[1]))
+                top_scorers.reverse()
                 print(tabulate(top_scorers, headers=['Player Name', 'Goal Scored'], tablefmt='fancy_grid'))
             else:
                 raise ValueError('Not a Valid argument!\n Use -h option for help.')
@@ -75,7 +78,7 @@ def main():
         else:
             raise ValueError('Not a Valid argument!\n Use -h option for help')
     if args[1] == '-C' or args[1] == '-c' or args[1] == '--cricket':
-        from cricketAPI import Cricket
+        from pyrag_sports.cricketAPI import Cricket
         if '-f' in args or '--football' in args:
             raise ValueError('Both Cricket and Football cannot be specifed together!')
         if args[2].lower() == 'live-score':

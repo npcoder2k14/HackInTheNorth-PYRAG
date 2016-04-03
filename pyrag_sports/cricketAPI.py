@@ -1,11 +1,18 @@
-import requests,os,bs4
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from flask import Flask
-from flask import request
-
-app=Flask(__name__)
-
+import requests
+import os
+import bs4
+try:
+    from flask import Flask
+    from flask import request
+    app = Flask(__name__)
+except:
+    pass
+parser = ''
+try:
+    import lxml
+    parser = 'lxml'
+except ImportError:
+    parser = 'html.parser'
 class Cricket(object):
     def get_player_stats(self, playerName, type_return='string'):
         base_url="http://www.espncricinfo.com"
@@ -16,13 +23,13 @@ class Cricket(object):
         url=url+playerName
         res=requests.get(url)
         res.raise_for_status()
-        soup=bs4.BeautifulSoup(res.text,"lxml")
+        soup=bs4.BeautifulSoup(res.text, parser)
         playerStatLink=soup.select(".ColumnistSmry") 
         playerStatLink=playerStatLink[1]
         temp_url=playerStatLink.get('href')
         url=base_url+temp_url
         res=requests.get(url)
-        soup=bs4.BeautifulSoup(res.text,"lxml")
+        soup=bs4.BeautifulSoup(res.text, parser)
         player_info=soup.select(".ciPlayerinformationtxt")
         player_stats={}   
         for item in player_info[0:len(player_info)]:
@@ -44,7 +51,7 @@ class Cricket(object):
     def live_score(self, type_return='string'):
 
         response = requests.get('http://www.cricbuzz.com/live-scores')
-        soup = bs4.BeautifulSoup(response.text,"lxml")
+        soup = bs4.BeautifulSoup(response.text, parser)
         team_mate = soup.findAll("div", {"class" : "cb-lv-main"})
         scores = []
         for i in team_mate:
@@ -55,7 +62,7 @@ class Cricket(object):
 
     def list_matches(self, type_return='string'):
         response = requests.get('https://cricket.yahoo.com/matches/schedule')
-        soup = bs4.BeautifulSoup(response.text,"lxml")
+        soup = bs4.BeautifulSoup(response.text, parser)
         head_list = soup.findAll("em", {"class": "ycric-table-heading"})
         invited_team_list = soup.findAll("div", {"class": "ycric-table-sub-heading"})
         no_list = soup.findAll("td", {"class": "sno"})
@@ -102,7 +109,7 @@ class Cricket(object):
          
          base_url='http://www.cricbuzz.com/cricket-news/latest-news'
          res=requests.get(base_url)
-         soup = bs4.BeautifulSoup(res.text,"html.parser")
+         soup = bs4.BeautifulSoup(res.text, parser)
          news = soup.select(".cb-col-33 a")
          news_dict={}
          for all_news in news:
