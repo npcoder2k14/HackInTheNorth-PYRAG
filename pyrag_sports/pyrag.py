@@ -1,6 +1,6 @@
 import sys
 import textwrap
-from pyrag_sports.extern import tabulate
+from pyrag_sports.extern.tabulate import tabulate
 
 def main():
     """\
