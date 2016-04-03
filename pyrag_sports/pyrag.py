@@ -68,6 +68,8 @@ def main():
                 top_scorers = []
                 for names in scorers:
                     top_scorers.append((names, scorers[names]))
+                top_scorers = sorted(top_scorers, key=lambda x:int(x[1]))
+                top_scorers.reverse()
                 print(tabulate(top_scorers, headers=['Player Name', 'Goal Scored'], tablefmt='fancy_grid'))
             else:
                 raise ValueError('Not a Valid argument!\n Use -h option for help.')
