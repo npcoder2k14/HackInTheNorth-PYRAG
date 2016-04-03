@@ -1,10 +1,10 @@
-import requests,os,bs4
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from flask import Flask
-from flask import request
-
-app=Flask(__name__)
+import requests
+import os
+import bs4
+try:
+    from flask import Flask
+    from flask import request
+    app = Flask(__name__)
 
 class Cricket(object):
     def get_player_stats(self, playerName, type_return='string'):
