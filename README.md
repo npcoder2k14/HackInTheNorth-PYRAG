@@ -14,7 +14,7 @@ Run setup.py
 ```bash
 $ python setup.py install
 ```
-# Useage
+# Usage
 ```bash
 $ pyrag -h
 Usage: sport-api [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
