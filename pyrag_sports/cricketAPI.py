@@ -5,7 +5,8 @@ try:
     from flask import Flask
     from flask import request
     app = Flask(__name__)
-
+except:
+    pass
 class Cricket(object):
     def get_player_stats(self, playerName, type_return='string'):
         base_url="http://www.espncricinfo.com"

@@ -16,11 +16,11 @@ if __name__ == "__main__":
         description = 'Get latest updates for football and cricket on command-line',
         url='https://github.com/npcoder2k14/HackInTheNorth-PYRAG',
         keywords='pyrag is a command line tool to get updates for football and cricket',
-        packages = ['pyrag', 'pyrag.extern'],
+        packages = ['pyrag_sports', 'pyrag_sports.extern'],
         license = 'MIT License',
         entry_points = {
             'console_scripts': [
-            'pyrag = pyrag.pyrag:main',
+            'pyrag = pyrag_sports.pyrag:main',
             ]
         },
         install_requires = ['beautifulsoup4', 'requests', 'lxml',
