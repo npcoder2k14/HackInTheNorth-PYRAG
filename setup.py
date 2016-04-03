@@ -23,6 +23,6 @@ if __name__ == "__main__":
             'pyrag = pyrag_sports.pyrag:main',
             ]
         },
-        install_requires = ['beautifulsoup4', 'requests', 'lxml',
+        install_requires = ['beautifulsoup4', 'requests',
                             'python-dateutil', 'parsedatetime']
     )
