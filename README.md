@@ -4,7 +4,7 @@ Sports API
 You must have python3 installed on your local system.
 Download the [zip](https://github.com/npcoder2k14/HackInTheNorth-PYRAG/archive/dev.zip) file or clone the repository dev's branch
 ```bash
-$ git clone https://github.com/npcoder2k14/HackInTheNorth-PYRAG/tree/dev
+$ git clone https://github.com/npcoder2k14/HackInTheNorth-PYRAG/
 ```
 Install the requirements
 ```bash
@@ -49,26 +49,27 @@ $ pyrag -F barclay topscorer
 ╒══════════════════╤═══════════════╕
 │ Player Name      │   Goal Scored │
 ╞══════════════════╪═══════════════╡
-│ Diego Costa      │            11 │
-├──────────────────┼───────────────┤
 │ Harry Kane       │            22 │
-├──────────────────┼───────────────┤
-│ Romelu Lukaku    │            18 │
-├──────────────────┼───────────────┤
-│ Gylfi Sigurdsson │            10 │
 ├──────────────────┼───────────────┤
 │ Jamie Vardy      │            19 │
 ├──────────────────┼───────────────┤
+│ Romelu Lukaku    │            18 │
+├──────────────────┼───────────────┤
 │ Sergio Agüero    │            17 │
-├──────────────────┼───────────────┤
-│ Jermain Defoe    │            12 │
-├──────────────────┼───────────────┤
-│ Olivier Giroud   │            12 │
 ├──────────────────┼───────────────┤
 │ Riyad Mahrez     │            16 │
 ├──────────────────┼───────────────┤
 │ Odion Ighalo     │            14 │
+├──────────────────┼───────────────┤
+│ Olivier Giroud   │            12 │
+├──────────────────┼───────────────┤
+│ Jermain Defoe    │            12 │
+├──────────────────┼───────────────┤
+│ Diego Costa      │            11 │
+├──────────────────┼───────────────┤
+│ Gylfi Sigurdsson │            10 │
 ╘══════════════════╧═══════════════╛
+
 ```
 
 
