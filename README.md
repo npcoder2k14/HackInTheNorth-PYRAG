@@ -8,11 +8,11 @@ $ git clone https://github.com/npcoder2k14/HackInTheNorth-PYRAG/
 ```
 Install the requirements
 ```bash
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 Run setup.py
 ```bash
-$ python setup.py install
+$ python3 setup.py install
 ```
 # Usage
 ```bash
