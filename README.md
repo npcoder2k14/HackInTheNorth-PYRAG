@@ -1,5 +1,5 @@
-# HackInTheNorth-PYRAG
-
+# PyRag Sports API
+A collection of command line tool and web API
 ## Installing Command line tool for pyrag
 You must have python3 installed on your local system.
 Download the [zip](https://github.com/npcoder2k14/HackInTheNorth-PYRAG/archive/dev.zip) file or clone the repository dev's branch
@@ -17,7 +17,7 @@ $ python3 setup.py install
 # Usage
 ```bash
 $ pyrag -h
-Usage: sport-api [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
+Usage: pyrag [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
 
 Get latest updates for football and cricket
 
@@ -37,7 +37,7 @@ barclay, fifa]            Get football updates. The tournament for which you
 player-stats[name]]       Fields to get. `live-scores` to get live socre of
                           on-going matches, `news` to get latest news headlines,
                           `player-stats` to get statistics of player specified.
-                          `fixtures` to get updates on upcoming messages.
+                          `fixtures` to get updates on upcoming matches.
                           Compulsory single argument. For football option you
                           can give additional options topscorer.
                           Use `-` instead of space in names.
