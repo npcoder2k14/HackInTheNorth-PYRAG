@@ -35,14 +35,14 @@ class Cricket(object):
         res=requests.get(url, stream=True, proxies=proxy_dict)
         res.raise_for_status()
         soup=bs4.BeautifulSoup(res.text, parser)
-        playerStatLink=soup.select(".ColumnistSmry") 
+        playerStatLink=soup.select(".ColumnistSmry")
         playerStatLink=playerStatLink[1]
         temp_url=playerStatLink.get('href')
         url=base_url+temp_url
         res=requests.get(url)
         soup=bs4.BeautifulSoup(res.text, parser)
         player_info=soup.select(".ciPlayerinformationtxt")
-        player_stats={}   
+        player_stats={}
         for item in player_info[0:len(player_info)]:
             b=item.find('b')
             if b.string=="Major teams":
@@ -117,7 +117,7 @@ class Cricket(object):
         return str(matches)
 
     def news(self, type_return='string'):
-         
+
          base_url='http://www.cricbuzz.com/cricket-news/latest-news'
          res=requests.get(base_url, stream=True, proxies=proxy_dict)
          soup = bs4.BeautifulSoup(res.text, parser)
@@ -128,7 +128,7 @@ class Cricket(object):
                  news_dict[all_news.get("title")]=base_url+all_news.get("href")
          if type_return == 'dict':
             return news_dict
-         return str(news_dict)
+         return json.dumps(str(news_dict));
 
 if __name__ == '__main__':
     app.add_url_rule('/',view_func=attr.news)
