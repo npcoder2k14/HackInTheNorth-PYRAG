@@ -114,7 +114,7 @@ class Cricket(object):
             matches[header].append((team_list[i].lstrip(), tour_dates_list[i].text.lstrip(), venue[i].lstrip(), result[i].lstrip()))
         if type_return == 'dict':
             return matches
-        return str(matches)
+        return json.dumps(str(matches));
 
     def news(self, type_return='string'):
 
