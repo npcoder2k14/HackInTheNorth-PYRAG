@@ -68,8 +68,8 @@ class Cricket(object):
         for i in team_mate:
             scores.append(i.text)
         if type_return == 'dict':
-            return scores
-        return str(scores)
+            return scores    
+        return json.dumps(str(scores));
 
     def list_matches(self, type_return='string'):
         response = requests.get('https://cricket.yahoo.com/matches/schedule', stream=True, proxies=proxy_dict)
