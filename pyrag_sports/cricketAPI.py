@@ -5,12 +5,12 @@ import bs4
 try:
     from flask import Flask
     from flask import request
-    from flask.ext.cors import CORS, cross_origin
+    #from flask.ext.cors import CORS, cross_origin
     app = Flask(__name__)
-    cors=CORS(app)
-    app.config['CORS_HEADERS']='Content-Type'
-    @app.route("/cric")
-    @cross_origin()
+    #cors=CORS(app)
+    #app.config['CORS_HEADERS']='Content-Type'
+    #@app.route("/cric")
+    #@cross_origin()
 
 except:
     pass
@@ -74,7 +74,7 @@ class Cricket(object):
         for i in team_mate:
             scores.append(i.text)
         if type_return == 'dict':
-            return scores    
+            return scores
         return json.dumps(str(scores));
 
     def list_matches(self, type_return='string'):
