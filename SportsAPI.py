@@ -310,11 +310,17 @@ class Cricket(object):
                 temp=item.find('span')
                 temp=temp.string
             player_stats[b.string]=temp
+        """    
         if type_return == 'dict':
             return player_stats
         else:
             player_stats = json.dumps(player_stats)
             return str(player_stats)
+        """
+        final_res=jsonify(result=player_stats)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res     
 
     def live_score(self, type_return='string'):
 
@@ -324,10 +330,17 @@ class Cricket(object):
         scores = []
         for i in team_mate:
             scores.append(i.text)
+        
+        final_res=jsonify(result=scores)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res     
+        """    
         if type_return == 'dict':
             return scores
         return str(scores)
-
+        """
+        
     def list_matches(self, type_return='string'):
         response = requests.get('https://cricket.yahoo.com/matches/schedule')
         soup = bs4.BeautifulSoup(response.text,"lxml")
@@ -369,11 +382,17 @@ class Cricket(object):
                 matches[header] = []
                 heading = heading+1
             matches[header].append((team_list[i].lstrip(), tour_dates_list[i].text.lstrip(), venue[i].lstrip(), result[i].lstrip()))
+        final_res=jsonify(result=matches)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res 
+        """
         if type_return == 'dict':
             return matches
         matches = json.dumps(matches)
         return str(matches)
-
+        """
+        
     def news(self, type_return='string'):
 
          base_url='http://www.cricbuzz.com/cricket-news/latest-news'
