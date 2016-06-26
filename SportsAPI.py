@@ -12,7 +12,7 @@ months = {
               3  :  "MARCH",
               4  :  "APRIL",
               5  :  "MAY",
-              6  :  "JUNE", 
+              6  :  "JUNE",
               7  :  "JULY",
               8  :  "AUGUST",
               9  :  "SEPTEMBER",
@@ -54,7 +54,7 @@ for football news : go to /foot/news/ <br>
 for football pointstable : go to /foot/pointstable/ <br>
 <br>
 for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          # There will be no double quotes hii"""
-        
+
 
     def get_news_headlines(self, get_club_news=False, type_return='string'):
         """
@@ -100,7 +100,7 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         now = datetime.datetime.now()
         url = "http://www.premierleague.com/en-gb/matchday/league-table.html?season=2015-2016&month=" +\
                 months[now.month] + "&timelineView=date&toDate=1451433599999&tableView=NEXT_3_FIXTURES"
-                
+
         res = requests.get(url, stream=True)
         soup = bs4.BeautifulSoup(res.text,'lxml')
         team_names = soup(template = '.next3FixturesTable')
@@ -180,7 +180,7 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         for i in range(len(top_scorers)):
             return_dict[top_scorers[i]] = top_scorers_goals[i]
 
-        
+
         return str(return_dict).encode("utf-8")
 
     def Fixtures(self, return_type='string'):
@@ -278,7 +278,7 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
             statsDict[temp[16]] = temp[17]
             statsDict = json.dumps(statsDict)
             return str(statsDict)
-        
+
         except:
             raise ValueError('Name not found, enter a valid name of player!')
 
@@ -291,14 +291,14 @@ class Cricket(object):
         res=requests.get(url)
         res.raise_for_status()
         soup=bs4.BeautifulSoup(res.text,"lxml")
-        playerStatLink=soup.select(".ColumnistSmry") 
+        playerStatLink=soup.select(".ColumnistSmry")
         playerStatLink=playerStatLink[1]
         temp_url=playerStatLink.get('href')
         url=base_url+temp_url
         res=requests.get(url)
         soup=bs4.BeautifulSoup(res.text,"lxml")
         player_info=soup.select(".ciPlayerinformationtxt")
-        player_stats={}   
+        player_stats={}
         for item in player_info[0:len(player_info)]:
             b=item.find('b')
             if b.string=="Major teams":
@@ -375,7 +375,7 @@ class Cricket(object):
         return str(matches)
 
     def news(self, type_return='string'):
-         
+
          base_url='http://www.cricbuzz.com/cricket-news/latest-news'
          res=requests.get(base_url)
          soup = bs4.BeautifulSoup(res.text,"html.parser")
@@ -385,12 +385,18 @@ class Cricket(object):
          for all_news in news:
              if str(all_news.get("title"))!="More Photos" and str(all_news.get("title"))!="None":
                  news_dict[all_news.get("title")]=url+all_news.get("href")
+         
+         final_res=jsonify(result=news_dict)
+         final_res.status_code = 200
+         final_res.headers['Access-Control-Allow-Origin'] = '*'
+         return final_res        
+         """        
          if type_return == 'dict':
             return news_dict
          news_dict = json.dumps(news_dict)
          return str(news_dict)
-		
-       
+         """ 
+
 
 if __name__=='__main__':
     cricc =  Cricket()
@@ -398,7 +404,7 @@ if __name__=='__main__':
     app.add_url_rule('/cric/matches/',view_func=cricc.list_matches)
     app.add_url_rule('/cric/live/',view_func=cricc.live_score)
     app.add_url_rule('/cric/player_stats/',view_func=cricc.get_player_stats)
-    
+
     foot=Barclay()
     app.add_url_rule('/',view_func=foot.documentation)
     app.add_url_rule('/foot/news/',view_func=foot.get_news_headlines)
