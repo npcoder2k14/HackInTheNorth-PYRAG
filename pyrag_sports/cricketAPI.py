@@ -6,8 +6,13 @@ import sys
 try:
     from flask import Flask
     from flask import request
-    #from flask.ext.cors import CORS, cross_origin
+    from flask.ext.cors import CORS, cross_origin
+    from datetime import timedelta
+    from flask import make_response, request, current_app
+    from functools import update_wrapper
     app = Flask(__name__)
+    @app.route('/')
+    @crossdomain(origin='*')
     #cors=CORS(app)
     #app.config['CORS_HEADERS']='Content-Type'
     #@app.route("/cric")
