@@ -1,6 +1,7 @@
 import requests
 import os
 import bs4
+import sys
 
 try:
     from flask import Flask
@@ -30,6 +31,7 @@ try:
 except:
     import urllib
     proxy_dict = urllib.getproxies()
+
 class Cricket(object):
     def get_player_stats(self, playerName, type_return='string'):
         base_url="http://www.espncricinfo.com"
@@ -75,7 +77,7 @@ class Cricket(object):
             scores.append(i.text)
         if type_return == 'dict':
             return scores
-        return json.dumps(str(scores));
+        return json.dumps(str(scores))
 
     def list_matches(self, type_return='string'):
         response = requests.get('https://cricket.yahoo.com/matches/schedule', stream=True, proxies=proxy_dict)
@@ -120,7 +122,7 @@ class Cricket(object):
             matches[header].append((team_list[i].lstrip(), tour_dates_list[i].text.lstrip(), venue[i].lstrip(), result[i].lstrip()))
         if type_return == 'dict':
             return matches
-        return json.dumps(str(matches));
+        return json.dumps(str(matches))
 
     def news(self, type_return='string'):
 
@@ -134,7 +136,7 @@ class Cricket(object):
                  news_dict[all_news.get("title")]=base_url+all_news.get("href")
          if type_return == 'dict':
             return news_dict
-         return json.dumps(str(news_dict)) % _GET_PARAMS('callback');
+         return json.dumps(str(news_dict)) % _GET_PARAMS('callback')
 
 if __name__ == '__main__':
     app.add_url_rule('/',view_func=attr.news)
