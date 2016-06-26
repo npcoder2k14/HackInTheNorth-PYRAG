@@ -11,7 +11,7 @@ try:
     from flask import make_response, request, current_app
     from functools import update_wrapper
     app = Flask(__name__)
-    @app.route('/')
+    @app.route('/cric/')
     @crossdomain(origin='*')
     #cors=CORS(app)
     #app.config['CORS_HEADERS']='Content-Type'
