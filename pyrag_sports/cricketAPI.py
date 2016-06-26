@@ -134,7 +134,7 @@ class Cricket(object):
                  news_dict[all_news.get("title")]=base_url+all_news.get("href")
          if type_return == 'dict':
             return news_dict
-         return json.dumps(str(news_dict));
+         return json.dumps(str(news_dict)) % _GET_PARAMS('callback');
 
 if __name__ == '__main__':
     app.add_url_rule('/',view_func=attr.news)
