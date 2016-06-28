@@ -91,10 +91,15 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         return_dict = {}
         for i, name in enumerate(news_headline):
             return_dict[name] = news_url[i]
-
+        """ 
         #if type_return == 'dict':
         return_dict=json.dumps(return_dict)
         return str(return_dict)
+        """
+        final_res=jsonify(result=return_dict)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
 
     def next3Fixtures(self, type_return='string'):
         now = datetime.datetime.now()
@@ -114,11 +119,16 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         return_dict = {}
         for i in range(len(team_names)):
             return_dict[team_names[i]] = next_3_fixtures[i]
-
+        """
         if type_return == 'dict':
             return_dict=json.dumps(return_dict)
             return return_dict
-
+        """
+        final_res=jsonify(result=return_dict)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
+        
     def pointsTable(self, type_return='string'):
         url = 'http://www.premierleague.com/en-gb/matchday/league-table.html'
 
@@ -156,9 +166,14 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         return_dict = {}
         for i in range (len(team_name)):
             return_dict[team_name[i]] = [matches_played[i], matches_won[i], matches_drew[i], matches_lost[i], goals_difference[i], points[i]]
-
+        """
         return_dict=json.dumps(return_dict)
         return return_dict
+        """
+        final_res=jsonify(result=return_dict)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
 
     def topScorers(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb.html"
@@ -180,8 +195,12 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         for i in range(len(top_scorers)):
             return_dict[top_scorers[i]] = top_scorers_goals[i]
 
-
-        return str(return_dict).encode("utf-8")
+        
+        #return str(return_dict).encode("utf-8")
+        final_res=jsonify(result=str(return_dict).encode("utf-8"))
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
 
     def Fixtures(self, return_type='string'):
         url = "http://www.premierleague.com/en-gb/matchday/matches.html?paramClubId=ALL&paramComp_8=true&view=.dateSeason"
@@ -207,7 +226,12 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
             for i in range(len(fixtures_l)):
                 fixtures_location.append(str(fixtures_l[i].text))
 
-        return str(list(zip(fixtures_clubs, fixtures_time, fixtures_location)))
+        #return str(list(zip(fixtures_clubs, fixtures_time, fixtures_location)))
+        return_list=list(zip(fixtures_clubs, fixtures_time, fixtures_location))
+        final_res=jsonify(result=return_list)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
 
     def Results(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb.html"
@@ -240,7 +264,12 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         results_location = results_location[0:20]
         results_location.reverse()
         if len(str(zip(results_time, results_clubs, results_location)))!=0:
-          return str(zip(results_time, results_clubs, results_location))
+          return_list=list(zip(results_time, results_clubs, results_location))
+          final_res=jsonify(result=return_list)
+          final_res.status_code = 200
+          final_res.headers['Access-Control-Allow-Origin'] = '*'
+          return final_res
+          #return str(zip(results_time, results_clubs, results_location))
         else :
             return "NO data found"
 
@@ -256,7 +285,11 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
             temp = ' '.join(temp)
             live_matches.append(temp)
 
-        return str(live_matches)
+        #return str(live_matches)
+        final_res=jsonify(result=live_matches)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
 
     def playerStats(self):
         try:
@@ -276,8 +309,12 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
             statsDict[temp[8]] = temp[9]
             statsDict[temp[12]] = temp[13]
             statsDict[temp[16]] = temp[17]
-            statsDict = json.dumps(statsDict)
-            return str(statsDict)
+            #statsDict = json.dumps(statsDict)
+            #return str(statsDict)
+            final_res=jsonify(result=statsDict)
+            final_res.status_code = 200
+            final_res.headers['Access-Control-Allow-Origin'] = '*'
+            return final_res
 
         except:
             raise ValueError('Name not found, enter a valid name of player!')
@@ -360,6 +397,8 @@ class Cricket(object):
         # print(live_dict)
         live_score.append(live_dict)
       final_res=jsonify(result=live_score)
+      final_res.status_code = 200
+      final_res.headers['Access-Control-Allow-Origin'] = '*'
       return final_res  
         
     def list_matches(self, type_return='string'):
